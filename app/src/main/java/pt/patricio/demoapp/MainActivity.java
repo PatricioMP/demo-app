@@ -25,8 +25,7 @@ import android.view.View;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final int REQUEST_CAMERA_PERMISSION = 1;
-    private static final int REQUEST_WRITE_PERMISSION = 2;
+    private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 1;
     public static final String FRAGMENT_DIALOG = "dialog";
     private DrawerLayout drawer;
 
@@ -47,9 +46,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
-        ActivityCompat.requestPermissions(this,
-                new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
+                new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
 
         findViewById(R.id.overlay_glasses).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,9 +77,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_CAMERA_PERMISSION) {
-            if (grantResults.length != 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                ErrorDialog.newInstance(getString(R.string.camera_permission))
+        if (requestCode == ASK_MULTIPLE_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length != 2 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                ErrorDialog.newInstance(getString(R.string.permission))
                         .show(getFragmentManager(), FRAGMENT_DIALOG);
             }
         } else {

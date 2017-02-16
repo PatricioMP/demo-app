@@ -78,6 +78,7 @@ public class GalleriesSnapping extends HorizontalScrollView {
         //load first image
         loadImage();
 
+
         setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

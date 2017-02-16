@@ -39,27 +39,33 @@ public class GalleryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         final LinearLayout photoGallery = (LinearLayout) view.findViewById(R.id.photo_gallery);
-        photoGallery.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            public void onGlobalLayout() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    photoGallery.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                } else {
-                    photoGallery.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+
+        final List<File> localImages = getLocalImages();
+        if(localImages.size() > 0) {
+
+            photoGallery.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                public void onGlobalLayout() {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        photoGallery.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    }
+                    else {
+                        photoGallery.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    }
+
+                    final GalleriesSnapping gn = new GalleriesSnapping(getActivity());
+                    gn.setFeatureItems(localImages, photoGallery.getWidth(), photoGallery.getHeight());
+
+                    photoGallery.addView(gn);
                 }
-
-                final GalleriesSnapping gn = new GalleriesSnapping(getActivity());
-                gn.setFeatureItems(getLocalImages(), photoGallery.getWidth(), photoGallery.getHeight());
-
-                photoGallery.addView(gn);
-            }
-        });
+            });
+        }
     }
 
     private List<File> getLocalImages() {
         File myDir = new File(STORAGE_FILE_PATH + STORAGE_TEMP_PATH);
         List<File> photos = new ArrayList<>();
 
-        if(myDir.exists() && myDir.isDirectory()) {
+        if(myDir.exists() && myDir.isDirectory() && myDir.listFiles() != null) {
             Collections.addAll(photos, myDir.listFiles());
         }
         return photos;

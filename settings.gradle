@@ -1,1 +1,2 @@
-include ':app', ':globaloverlay', ':sdk'
+include ':app', ':sdk'
+project(':sdk').projectDir = new File(settingsDir, '../DemoSDK/sdk')
